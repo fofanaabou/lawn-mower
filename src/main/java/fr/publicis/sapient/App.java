@@ -5,12 +5,12 @@ import fr.publicis.sapient.location.Orientation;
 import fr.publicis.sapient.location.Position;
 import fr.publicis.sapient.mower.Clipper;
 import fr.publicis.sapient.mower.Command;
-import fr.publicis.sapient.mower.Lawn;
+import fr.publicis.sapient.mower.LawnDimension;
 
 import java.util.logging.Logger;
 
 import static fr.publicis.sapient.mower.Constants.INFO_COLOR;
-import static fr.publicis.sapient.mower.Constants.TEXT_BACKGROUND_COLOR;
+import static fr.publicis.sapient.mower.Constants.HEAD_TEXT_COLOR;
 
 /**
  * Hello world!
@@ -22,15 +22,15 @@ public class App {
         Position position = new Position(coordinates, Orientation.NORTH);
 
 
-        LOGGER.info(() ->  INFO_COLOR + position + TEXT_BACKGROUND_COLOR);
+        LOGGER.info(() ->  INFO_COLOR + position + HEAD_TEXT_COLOR);
 
         Clipper clipper = new Clipper(position);
-        Lawn lawn = new Lawn(5,4);
+        LawnDimension lawnDimension = new LawnDimension(5,4);
 
         clipper.pivot(Command.LEFT.getShortName());
         clipper.pivot(Command.LEFT.getShortName());
         clipper.pivot(Command.RIGHT.getShortName());
-        clipper.move(new Coordinates(8,4), lawn);
-        LOGGER.info(() -> String.format("%s %s %s", INFO_COLOR, clipper, TEXT_BACKGROUND_COLOR));
+        clipper.move(new Coordinates(8,4), lawnDimension);
+        LOGGER.info(() ->  INFO_COLOR + clipper + HEAD_TEXT_COLOR);
     }
 }

@@ -4,7 +4,6 @@ import fr.publicis.sapient.location.Coordinates;
 import fr.publicis.sapient.location.Orientation;
 import fr.publicis.sapient.location.Position;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -19,7 +18,10 @@ public class Clipper {
 
     public Clipper(Position position) {
         this.position = position;
-        LOGGER.setLevel(Level.INFO);
+    }
+
+    public Position getPosition() {
+        return position;
     }
 
     /**
@@ -34,24 +36,23 @@ public class Clipper {
             turnLeft();
         }
         LOGGER.info(() -> Constants.INFO_COLOR + " The mower is now look at the direction -> " +
-                position.getOrientation() + Constants.TEXT_BACKGROUND_COLOR);
+                position.getOrientation() + Constants.HEAD_TEXT_COLOR);
     }
 
     /**
      * this function allow to forward the mower in its actual direction without modify its orientation
      *
      * @param coordinates: the location of the mower in lawn
-     * @param lawn:        the lawn where mowers are deployed
+     * @param lawnDimension:        the lawn where mowers are deployed
      */
-    public void move(Coordinates coordinates, Lawn lawn) {
-
-        if (coordinates.getX() > lawn.width() || coordinates.getY() > lawn.height()) {
-            LOGGER.info(() -> Constants.ERROR_COLOR + " The coordinates is out of lawn -> " +
-                    position.getOrientation() + Constants.TEXT_BACKGROUND_COLOR);
+    public void move(Coordinates coordinates, LawnDimension lawnDimension) {
+        if (coordinates.getX() > lawnDimension.width() || coordinates.getY() > lawnDimension.height()) {
+            LOGGER.info(() -> Constants.ERROR_COLOR + " The coordinates (" + coordinates + ") is out of lawn"
+                    + Constants.HEAD_TEXT_COLOR);
             return;
         }
 
-        position.setPosition(coordinates);
+        position.setCoordinates(coordinates);
     }
 
     private void turnLeft() {

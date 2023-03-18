@@ -11,11 +11,11 @@ public class Position {
         this.orientation = orientation;
     }
 
-    public Coordinates getPosition() {
+    public Coordinates getCoordinates() {
         return coordinates;
     }
 
-    public void setPosition(Coordinates coordinates) {
+    public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
     }
 
