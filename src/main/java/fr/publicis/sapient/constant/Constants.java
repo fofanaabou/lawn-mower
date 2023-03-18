@@ -1,4 +1,4 @@
-package fr.publicis.sapient.mower;
+package fr.publicis.sapient.constant;
 
 /**
  * Author: Abou FOFANA

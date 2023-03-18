@@ -1,36 +1,67 @@
 package fr.publicis.sapient;
 
-import fr.publicis.sapient.location.Coordinates;
-import fr.publicis.sapient.location.Orientation;
-import fr.publicis.sapient.location.Position;
+import fr.publicis.sapient.models.DataContainer;
+import fr.publicis.sapient.repository.DataRepository;
+import fr.publicis.sapient.models.Coordinates;
+import fr.publicis.sapient.enums.Orientation;
+import fr.publicis.sapient.models.Position;
 import fr.publicis.sapient.mower.Clipper;
-import fr.publicis.sapient.mower.Command;
-import fr.publicis.sapient.mower.LawnDimension;
+import fr.publicis.sapient.enums.Command;
+import fr.publicis.sapient.models.LawnDimension;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
-import static fr.publicis.sapient.mower.Constants.INFO_COLOR;
-import static fr.publicis.sapient.mower.Constants.HEAD_TEXT_COLOR;
+import static fr.publicis.sapient.constant.Constants.INFO_COLOR;
+import static fr.publicis.sapient.constant.Constants.HEAD_TEXT_COLOR;
 
 /**
- * Hello world!
+ * Lawn mower application
  */
 public class App {
     private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    public static void main(String[] args) {
-        Coordinates coordinates = new Coordinates(1,2);
-        Position position = new Position(coordinates, Orientation.NORTH);
+    private static final String p = "src/main/resources/data/mowers-info.txt";
+    private static final DataRepository dataRepository = new DataRepository();
 
 
-        LOGGER.info(() ->  INFO_COLOR + position + HEAD_TEXT_COLOR);
 
-        Clipper clipper = new Clipper(position);
-        LawnDimension lawnDimension = new LawnDimension(5,4);
+    public static void main(String[] args) throws IOException {
 
-        clipper.pivot(Command.LEFT.getShortName());
-        clipper.pivot(Command.LEFT.getShortName());
-        clipper.pivot(Command.RIGHT.getShortName());
-        clipper.move(new Coordinates(8,4), lawnDimension);
-        LOGGER.info(() ->  INFO_COLOR + clipper + HEAD_TEXT_COLOR);
+
+        DataContainer dataContainer = dataRepository.readData(p);
+        LawnDimension lawnDimension = dataContainer.getLawnDimension();
+
+        Map<Clipper, List<Character>> clippers = dataContainer.getClipperMap();
+
+        for(Map.Entry entry: clippers.entrySet()) {
+            System.out.println(entry.getKey());
+            start((Clipper) entry.getKey(), (List<Character>) entry.getValue(), lawnDimension);
+        }
+
+
+    }
+
+    private static void start(Clipper clipper, List<Character> commands, LawnDimension lawnDimension) {
+
+
+        int i = 0;
+        int j = 1;
+        for(char command: commands) {
+            Coordinates coordinates = new Coordinates(i, j);
+            switch (command) {
+                case 'A' -> clipper.move(coordinates, lawnDimension);
+                case 'D', 'G' -> {
+                    clipper.pivot(command);
+                    System.out.println(clipper);
+                }
+                default -> throw new IllegalArgumentException("invalid command");
+            }
+
+            i++;
+            j++;
+        }
+
     }
 }

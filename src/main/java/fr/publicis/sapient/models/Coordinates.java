@@ -1,4 +1,4 @@
-package fr.publicis.sapient.location;
+package fr.publicis.sapient.models;
 
 import java.util.Objects;
 

@@ -1,4 +1,6 @@
-package fr.publicis.sapient.location;
+package fr.publicis.sapient.models;
+
+import fr.publicis.sapient.enums.Orientation;
 
 import java.util.Objects;
 

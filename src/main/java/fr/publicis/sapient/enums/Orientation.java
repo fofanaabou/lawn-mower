@@ -1,4 +1,4 @@
-package fr.publicis.sapient.location;
+package fr.publicis.sapient.enums;
 
 /**
  * Author: Abou FOFANA
@@ -36,4 +36,5 @@ public enum Orientation {
      * @return the first of the cardinal point
      */
     public abstract Character getShorName();
+
 }

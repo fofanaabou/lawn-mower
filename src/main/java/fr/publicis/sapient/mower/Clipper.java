@@ -1,8 +1,11 @@
 package fr.publicis.sapient.mower;
 
-import fr.publicis.sapient.location.Coordinates;
-import fr.publicis.sapient.location.Orientation;
-import fr.publicis.sapient.location.Position;
+import fr.publicis.sapient.constant.Constants;
+import fr.publicis.sapient.enums.Command;
+import fr.publicis.sapient.models.Coordinates;
+import fr.publicis.sapient.enums.Orientation;
+import fr.publicis.sapient.models.LawnDimension;
+import fr.publicis.sapient.models.Position;
 
 import java.util.logging.Logger;
 
