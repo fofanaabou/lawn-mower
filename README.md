@@ -1,2 +1,2 @@
 # publicis-sapient-challenge
-Solve mower problem
+Solve clipper problem
