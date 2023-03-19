@@ -1,21 +1,14 @@
 package fr.publicis.sapient;
 
-import fr.publicis.sapient.handler.FileNotFoundException;
 import fr.publicis.sapient.models.DataContainer;
-import fr.publicis.sapient.repository.DataRepository;
-import fr.publicis.sapient.models.Coordinates;
-import fr.publicis.sapient.enums.Orientation;
-import fr.publicis.sapient.models.Position;
 import fr.publicis.sapient.mower.Clipper;
-import fr.publicis.sapient.enums.Command;
-import fr.publicis.sapient.models.LawnDimension;
+import fr.publicis.sapient.repository.DataRepository;
 
-import java.io.Console;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
-import static fr.publicis.sapient.constant.Constants.*;
+import static fr.publicis.sapient.constant.Constants.HEAD_TEXT_COLOR;
 
 /**
  * Lawn mower application
@@ -24,11 +17,10 @@ public class App {
     private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private static final DataRepository dataRepository = new DataRepository();
     private static final Scanner scanner = new Scanner(System.in);
+    public static final String TABLE_LINE = "+-----------------+------+%n";
 
+    public static void main(String[] args) {
 
-    public static void main(String[] args) throws IOException {
-
-        System.out.println();
         System.out.println("Enter the file's path (Example -> /user/home/data/info.txt):");
         boolean isValidPath = true;
 
@@ -50,7 +42,6 @@ public class App {
 
                 displayPositions(clippers);
 
-
             } catch (IOException e) {
                 LOGGER.info(HEAD_TEXT_COLOR + "File not found. please enter a valid path:" + HEAD_TEXT_COLOR);
             }
@@ -60,18 +51,17 @@ public class App {
     }
 
     private static void displayPositions(List<Clipper> clippers) {
+
         LOGGER.info("=================Clippers info==============");
-
-
         String leftAlignFormat = "| %-15s | %-4s |%n";
 
-        System.out.format("+-----------------+------+%n");
+        System.out.format(TABLE_LINE);
         System.out.format("| Last position   | ID   |%n");
-        System.out.format("+-----------------+------+%n");
+        System.out.format(TABLE_LINE);
         for (Clipper clipper : clippers) {
             System.out.format(leftAlignFormat, clipper.getPosition(), clipper.getId());
         }
-        System.out.format("+-----------------+------+%n");
+        System.out.format(TABLE_LINE);
     }
 
     private static void start(Clipper clipper, List<Character> commands) {
