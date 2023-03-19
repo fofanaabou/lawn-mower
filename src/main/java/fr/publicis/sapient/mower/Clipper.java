@@ -51,7 +51,7 @@ public class Clipper {
         } else if (command.equals(Command.LEFT.getShortName())) {
             turnLeft();
         }
-        LOGGER.info(() -> Constants.INFO_COLOR + " The mower is now look at the direction -> " +
+        LOGGER.info(() -> Constants.INFO_COLOR + "clipper@" + id + " actual direction is -> " +
                 position.getOrientation() + Constants.HEAD_TEXT_COLOR);
     }
 
@@ -70,16 +70,17 @@ public class Clipper {
             y = orientation.equals(Orientation.NORTH) ? y + 1 : y - 1;
         }
 
-        Coordinates coordinates = new Coordinates(x, y);
-        BiPredicate<Integer, Integer> predicate = (a, b) -> (a > lawnDimension.width() || b > lawnDimension.height())
+        BiPredicate<Integer, Integer> predicate = (a, b) -> (a > lawnDimension.width() || b > lawnDimension.length())
                 || (a < 0 || b < 0);
+
+        Coordinates coordinates = new Coordinates(x, y);
         if (predicate.test(x, y)) {
             LOGGER.info(() -> Constants.ERROR_COLOR + " The coordinates (" + coordinates + ") is out of lawn"
                     + Constants.HEAD_TEXT_COLOR);
             return;
         }
 
-        position.setCoordinates(new Coordinates(x, y));
+        position.setCoordinates(coordinates);
     }
 
     private void turnLeft() {

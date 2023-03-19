@@ -1,5 +1,6 @@
 package fr.publicis.sapient;
 
+import fr.publicis.sapient.handler.FileNotFoundException;
 import fr.publicis.sapient.models.DataContainer;
 import fr.publicis.sapient.repository.DataRepository;
 import fr.publicis.sapient.models.Coordinates;
@@ -9,54 +10,73 @@ import fr.publicis.sapient.mower.Clipper;
 import fr.publicis.sapient.enums.Command;
 import fr.publicis.sapient.models.LawnDimension;
 
+import java.io.Console;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
-import static fr.publicis.sapient.constant.Constants.INFO_COLOR;
-import static fr.publicis.sapient.constant.Constants.HEAD_TEXT_COLOR;
+import static fr.publicis.sapient.constant.Constants.*;
 
 /**
  * Lawn mower application
  */
 public class App {
     private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    private static final String p = "src/main/resources/data/mowers-info.txt";
     private static final DataRepository dataRepository = new DataRepository();
-
+    private static final Scanner scanner = new Scanner(System.in);
 
 
     public static void main(String[] args) throws IOException {
 
+        System.out.println();
+        System.out.println("Enter the file's path (Example -> /user/home/data/info.txt):");
+        boolean isValidPath = true;
 
-        DataContainer dataContainer = dataRepository.readData(p);
-        LawnDimension lawnDimension = dataContainer.getLawnDimension();
+        while (isValidPath) {
+            String path = scanner.nextLine();
+            DataContainer dataContainer = null;
+            try {
+                dataContainer = dataRepository.readData(path);
+                Map<Clipper, List<Character>> clipperMap = dataContainer != null ? dataContainer.getClipperMap() : new HashMap<>();
 
-        Map<Clipper, List<Character>> clippers = dataContainer.getClipperMap();
+                List<Clipper> clippers = clipperMap.keySet()
+                        .stream()
+                        .sorted(Comparator.comparingInt(Clipper::getId))
+                        .toList();
 
-        List<Clipper> cl = clippers.keySet().stream().sorted(Comparator.comparingInt(Clipper::getId)).toList();
+                for (Clipper clipper : clippers) {
+                    start(clipper, clipperMap.get(clipper));
+                }
 
-        List<Position> positions = new ArrayList<>();
+                displayPositions(clippers);
 
-        for(Clipper clipper: cl) {
-            start(clipper, clippers.get(clipper));
 
-            positions.add(clipper.getPosition());
+            } catch (IOException e) {
+                LOGGER.info(HEAD_TEXT_COLOR + "File not found. please enter a valid path:" + HEAD_TEXT_COLOR);
+            }
+
+            isValidPath = dataContainer == null;
         }
+    }
 
-        for(Position position: positions) {
-            System.out.println("position: " + position);
+    private static void displayPositions(List<Clipper> clippers) {
+        LOGGER.info("=================Clippers info==============");
+
+
+        String leftAlignFormat = "| %-15s | %-4s |%n";
+
+        System.out.format("+-----------------+------+%n");
+        System.out.format("| Last position   | ID   |%n");
+        System.out.format("+-----------------+------+%n");
+        for (Clipper clipper : clippers) {
+            System.out.format(leftAlignFormat, clipper.getPosition(), clipper.getId());
         }
-
-
+        System.out.format("+-----------------+------+%n");
     }
 
     private static void start(Clipper clipper, List<Character> commands) {
 
-        for(char command: commands) {
+        for (char command : commands) {
             switch (command) {
                 case 'A' -> clipper.move();
                 case 'D', 'G' -> clipper.pivot(command);
