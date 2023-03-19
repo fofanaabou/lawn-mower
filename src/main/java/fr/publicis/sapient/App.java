@@ -13,10 +13,13 @@ import static fr.publicis.sapient.constant.Constants.HEAD_TEXT_COLOR;
  * Lawn mower application
  */
 public class App {
+
     private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    public static final String TABLE_LINE = "+-----------------+------+%n";
+
     private static final DataRepository dataRepository = new DataRepository();
     private static final Scanner scanner = new Scanner(System.in);
-    public static final String TABLE_LINE = "+-----------------+------+%n";
+
 
     public static void main(String[] args) {
 
@@ -42,7 +45,7 @@ public class App {
                 displayPositions(clippers);
 
             } catch (IOException e) {
-                LOGGER.info(HEAD_TEXT_COLOR + "File not found. please enter a valid path:" + HEAD_TEXT_COLOR);
+                LOGGER.info(HEAD_TEXT_COLOR + "File not found please enter a valid path:" + HEAD_TEXT_COLOR);
             }
 
             isValidPath = clipperMap.isEmpty();
