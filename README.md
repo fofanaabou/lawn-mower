@@ -52,3 +52,9 @@ Vous devez fournir l'emplacement du fichier, un exemple a été donné précéde
 | 5 1 E           | 2    |
 +-----------------+------+
 ```
+6) Pour exécuter les tests unitaires 
+
+Lancer la commande suivante
+```shell
+mvn test
+```
