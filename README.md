@@ -23,7 +23,7 @@ Après avoir cloné ou téléchagé le projet sur votre machine, ci-dessous les 
  ```shell
 mvn package
 ```
-2) Créer un fichier txt contenant des données comme ce example 
+2) Créer un fichier txt contenant des données comme cet example 
 ```text
 5 5
 1 2 N
