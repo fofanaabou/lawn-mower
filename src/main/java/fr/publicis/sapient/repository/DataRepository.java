@@ -19,48 +19,66 @@ import java.util.*;
  **/
 public class DataRepository {
 
+    private static final int INDEX_OF_FIRST_LINE = 0;
+
     public DataContainer readData(String pathName) throws IOException {
+
         Path path = Paths.get(pathName);
         List<String> lines = Files.readAllLines(path.toAbsolutePath());
 
         DataContainer dataContainer = new DataContainer();
+
         LawnDimension lawnDimension = createLawnDimensionFromFileData(lines);
         dataContainer.setLawnDimension(lawnDimension);
 
-        Map<Clipper, List<Character>> clippers = getClippers(lines);
+        Map<Clipper, List<Character>> clippers = getClippers(lines, lawnDimension);
         dataContainer.setClipperMap(clippers);
-
-        System.out.println(lawnDimension);
 
         return dataContainer;
     }
 
+    /**
+     * this function extract the dimension of lawn. The first line in file content this information
+     * this line has two element, so we use 0 and 1 as index to retrieve their value from create list
+     * @param lines list of data from file
+     * @return the dimension of lawn
+     */
     private LawnDimension createLawnDimensionFromFileData(List<String> lines) {
 
-        List<Integer> dimensions = Arrays.stream(lines.get(0).split(" "))
+        List<Integer> dimensions = Arrays.stream(lines.get(INDEX_OF_FIRST_LINE).split(" "))
                 .map(Integer::valueOf)
                 .toList();
 
         return new LawnDimension(dimensions.get(0), dimensions.get(1));
     }
 
-    private Map<Clipper, List<Character>> getClippers(List<String> lines) {
+    /**
+     *
+     * @param lines list of data from file
+     * @param lawnDimension lawn dimension
+     * @return a map in which the key is clipper and the value is list of commands
+     */
+    private Map<Clipper, List<Character>> getClippers(List<String> lines, LawnDimension lawnDimension) {
+
         Map<Clipper, List<Character>> clippers = new HashMap<>();
+        int id = 1;
+
         for (int i = 1; i < lines.size(); i += 2) {
 
             String[] locations = lines.get(i).split(" ");
             Orientation orientation = getOrientation(locations[2].charAt(0));
             Coordinates coordinates = new Coordinates(Integer.parseInt(locations[0]), Integer.parseInt(locations[1]));
             Position position = new Position(coordinates, orientation);
-            Clipper clipper = new Clipper(position);
+            Clipper clipper = new Clipper(position, lawnDimension);
 
             List<Character> commands = new ArrayList<>();
             String commandString = lines.get(i + 1);
             for (int k = 0; k < commandString.length(); k++) {
                 commands.add(commandString.charAt(k));
             }
-            System.out.println(commands);
+            clipper.setId(id);
             clippers.put(clipper, commands);
+            id++;
         }
 
         return clippers;

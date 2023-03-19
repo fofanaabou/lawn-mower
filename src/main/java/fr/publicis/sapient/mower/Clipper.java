@@ -2,11 +2,12 @@ package fr.publicis.sapient.mower;
 
 import fr.publicis.sapient.constant.Constants;
 import fr.publicis.sapient.enums.Command;
-import fr.publicis.sapient.models.Coordinates;
 import fr.publicis.sapient.enums.Orientation;
+import fr.publicis.sapient.models.Coordinates;
 import fr.publicis.sapient.models.LawnDimension;
 import fr.publicis.sapient.models.Position;
 
+import java.util.function.BiPredicate;
 import java.util.logging.Logger;
 
 
@@ -17,14 +18,26 @@ import java.util.logging.Logger;
 public class Clipper {
 
     private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    Position position;
 
-    public Clipper(Position position) {
+    private Integer id;
+    private final Position position;
+    private final LawnDimension lawnDimension;
+
+    public Clipper(Position position, LawnDimension lawnDimension) {
         this.position = position;
+        this.lawnDimension = lawnDimension;
     }
 
     public Position getPosition() {
         return position;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     /**
@@ -44,18 +57,29 @@ public class Clipper {
 
     /**
      * this function allow to forward the mower in its actual direction without modify its orientation
-     *
-     * @param coordinates: the location of the mower in lawn
-     * @param lawnDimension:        the lawn where mowers are deployed
      */
-    public void move(Coordinates coordinates, LawnDimension lawnDimension) {
-        if (coordinates.getX() > lawnDimension.width() || coordinates.getY() > lawnDimension.height()) {
+    public void move() {
+
+        Coordinates coordinate = position.getCoordinates();
+        int x = coordinate.getX();
+        int y = coordinate.getY();
+        Orientation orientation = position.getOrientation();
+        if (orientation.equals(Orientation.WEST) || orientation.equals(Orientation.EAST)) {
+            x = orientation.equals(Orientation.WEST) ? x - 1 : x + 1;
+        } else {
+            y = orientation.equals(Orientation.NORTH) ? y + 1 : y - 1;
+        }
+
+        Coordinates coordinates = new Coordinates(x, y);
+        BiPredicate<Integer, Integer> predicate = (a, b) -> (a > lawnDimension.width() || b > lawnDimension.height())
+                || (a < 0 || b < 0);
+        if (predicate.test(x, y)) {
             LOGGER.info(() -> Constants.ERROR_COLOR + " The coordinates (" + coordinates + ") is out of lawn"
                     + Constants.HEAD_TEXT_COLOR);
             return;
         }
 
-        position.setCoordinates(coordinates);
+        position.setCoordinates(new Coordinates(x, y));
     }
 
     private void turnLeft() {

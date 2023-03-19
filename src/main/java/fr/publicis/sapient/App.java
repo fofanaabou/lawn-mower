@@ -10,6 +10,8 @@ import fr.publicis.sapient.enums.Command;
 import fr.publicis.sapient.models.LawnDimension;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -35,33 +37,31 @@ public class App {
 
         Map<Clipper, List<Character>> clippers = dataContainer.getClipperMap();
 
-        for(Map.Entry entry: clippers.entrySet()) {
-            System.out.println(entry.getKey());
-            start((Clipper) entry.getKey(), (List<Character>) entry.getValue(), lawnDimension);
+        List<Clipper> cl = clippers.keySet().stream().sorted(Comparator.comparingInt(Clipper::getId)).toList();
+
+        List<Position> positions = new ArrayList<>();
+
+        for(Clipper clipper: cl) {
+            start(clipper, clippers.get(clipper));
+
+            positions.add(clipper.getPosition());
+        }
+
+        for(Position position: positions) {
+            System.out.println("position: " + position);
         }
 
 
     }
 
-    private static void start(Clipper clipper, List<Character> commands, LawnDimension lawnDimension) {
+    private static void start(Clipper clipper, List<Character> commands) {
 
-
-        int i = 0;
-        int j = 1;
         for(char command: commands) {
-            Coordinates coordinates = new Coordinates(i, j);
             switch (command) {
-                case 'A' -> clipper.move(coordinates, lawnDimension);
-                case 'D', 'G' -> {
-                    clipper.pivot(command);
-                    System.out.println(clipper);
-                }
+                case 'A' -> clipper.move();
+                case 'D', 'G' -> clipper.pivot(command);
                 default -> throw new IllegalArgumentException("invalid command");
             }
-
-            i++;
-            j++;
         }
-
     }
 }
