@@ -5,19 +5,19 @@ d'une surface rectangulaire.
 
 ## Installation
 ### Prérequis 
-Afin de pouvoir exécuter ce programme sur votre machine vous installer [java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) 
+Afin de pouvoir exécuter ce programme sur votre machine vous devez installer [java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) 
 et [maven](https://maven.apache.org/install.html).
 ## Télécharger le code source
 #### Récupérer le code avec git
-Vous pouvez utiliser git pour télécharger le code  sur machine. Pour ce faire, utiliser la ligne commande ci-dessous
+Vous pouvez utiliser git pour télécharger le code  sur votre machine. Pour ce faire, utilisez la ligne de commande ci-dessous
 ```shell
 git clone https://github.com/fofanaabou/lawn-mower.git
 ```
 ### Récupérer avec le zip
-Vous pouvez télécharger une version compression sur en vous rendant sur le menu `code -> Download Zip`
+Vous pouvez télécharger une version compressée  en vous rendant sur le menu `code -> Download Zip`
 
 ## Utilisation
-Après avoir cloner ou téléchager le projet sur votre machine, ci-dessous les instructions pour l'exécuter:
+Après avoir cloné ou téléchagé le projet sur votre machine, ci-dessous les instructions pour l'exécuter:
 
  1) Rendez-vous dans le repertoire lawn-mower puis lancer la commande suivante:
  ```shell
@@ -31,7 +31,7 @@ GAGAGAGAA
 3 3 E
 AADAADADDA
 ```
-3) Aller dans le repertoire lawn-mower et la lancer la commande suivante:
+3) Aller dans le repertoire lawn-mower et lancer la commande suivante:
 ```shell
 java -jar target/lawnDimension-clipper-1.0-SNAPSHOT.jar
 ```
