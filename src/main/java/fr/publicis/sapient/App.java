@@ -1,6 +1,5 @@
 package fr.publicis.sapient;
 
-import fr.publicis.sapient.models.DataContainer;
 import fr.publicis.sapient.mower.Clipper;
 import fr.publicis.sapient.repository.DataRepository;
 
@@ -26,10 +25,10 @@ public class App {
 
         while (isValidPath) {
             String path = scanner.nextLine();
-            DataContainer dataContainer = null;
+            Map<Clipper, List<Character>> clipperMap = new HashMap<>();
+
             try {
-                dataContainer = dataRepository.readData(path);
-                Map<Clipper, List<Character>> clipperMap = dataContainer != null ? dataContainer.getClipperMap() : new HashMap<>();
+                clipperMap = dataRepository.readData(path);
 
                 List<Clipper> clippers = clipperMap.keySet()
                         .stream()
@@ -46,7 +45,7 @@ public class App {
                 LOGGER.info(HEAD_TEXT_COLOR + "File not found. please enter a valid path:" + HEAD_TEXT_COLOR);
             }
 
-            isValidPath = dataContainer == null;
+            isValidPath = clipperMap.isEmpty();
         }
     }
 

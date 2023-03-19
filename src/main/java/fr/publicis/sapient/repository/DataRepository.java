@@ -2,7 +2,6 @@ package fr.publicis.sapient.repository;
 
 import fr.publicis.sapient.enums.Orientation;
 import fr.publicis.sapient.models.Coordinates;
-import fr.publicis.sapient.models.DataContainer;
 import fr.publicis.sapient.models.LawnDimension;
 import fr.publicis.sapient.models.Position;
 import fr.publicis.sapient.mower.Clipper;
@@ -24,20 +23,14 @@ public class DataRepository {
     private static final int COORDINATE_FIRST_ELEMENT_INDEX = 0;
     private static final int COORDINATE_SECOND_ELEMENT_INDEX = 1;
 
-    public DataContainer readData(String pathName) throws IOException {
+    public Map<Clipper, List<Character>> readData(String pathName) throws IOException {
 
         Path path = Paths.get(pathName);
         List<String> lines = Files.readAllLines(path.toAbsolutePath());
 
-        DataContainer dataContainer = new DataContainer();
-
         LawnDimension lawnDimension = getLawnDimension(lines);
-        dataContainer.setLawnDimension(lawnDimension);
 
-        Map<Clipper, List<Character>> clippers = getClippersAndCommands(lines, lawnDimension);
-        dataContainer.setClipperMap(clippers);
-
-        return dataContainer;
+        return getClippersAndCommands(lines, lawnDimension);
     }
 
     /**

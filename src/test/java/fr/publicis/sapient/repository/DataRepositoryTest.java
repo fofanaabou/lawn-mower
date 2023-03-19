@@ -2,7 +2,6 @@ package fr.publicis.sapient.repository;
 
 import fr.publicis.sapient.enums.Orientation;
 import fr.publicis.sapient.models.Coordinates;
-import fr.publicis.sapient.models.DataContainer;
 import fr.publicis.sapient.models.Position;
 import fr.publicis.sapient.mower.Clipper;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,19 +23,16 @@ class DataRepositoryTest {
 
     private static final String FILE_PATH = "src/main/resources/data/mowers-info.txt";
     DataRepository dataRepository;
-    DataContainer dataContainer;
 
     @BeforeEach
-    void setUp() throws IOException {
+    void setUp() {
         dataRepository = new DataRepository();
-        dataContainer = dataRepository.readData(FILE_PATH);
-
     }
 
     @Test
-    void readData() {
+    void readData() throws IOException {
 
-        Map<Clipper, List<Character>> clipperMap =  dataContainer.getClipperMap();
+        Map<Clipper, List<Character>> clipperMap = dataRepository.readData(FILE_PATH);
         List<Clipper> clippers = clipperMap.keySet()
                 .stream()
                 .sorted(Comparator.comparingInt(Clipper::getId))
@@ -47,13 +43,13 @@ class DataRepositoryTest {
                     Clipper clipper = clippers.get(0);
                     Position position = clipper.getPosition();
                     assertEquals(Orientation.NORTH, position.getOrientation());
-                    assertEquals(new Coordinates(1,2), position.getCoordinates());
+                    assertEquals(new Coordinates(1, 2), position.getCoordinates());
                 },
                 () -> {
                     Clipper clipper = clippers.get(1);
                     Position position = clipper.getPosition();
                     assertEquals(Orientation.EAST, position.getOrientation());
-                    assertEquals(new Coordinates(3,3), position.getCoordinates());
+                    assertEquals(new Coordinates(3, 3), position.getCoordinates());
                 }
         );
     }
