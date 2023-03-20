@@ -22,7 +22,12 @@ public class Lawn {
         return previousLocation;
     }
 
-    public void addLocation(Integer id, Coordinates coordinates) {
+    /**
+     * add to the map the last position of clipper
+     * @param id of the clipper
+     * @param coordinates of clipper position
+     */
+    public void addPreviousLocation(Integer id, Coordinates coordinates) {
         previousLocation.put(id, coordinates);
     }
 

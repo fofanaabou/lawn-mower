@@ -71,7 +71,7 @@ public class Clipper {
         if (cannotMove(x, y, coordinates)) return;
 
         position.setCoordinates(coordinates);
-        lawn.addLocation(id, coordinates);
+        lawn.addPreviousLocation(id, coordinates);
     }
 
     /**
