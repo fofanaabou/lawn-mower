@@ -1,13 +1,12 @@
-package fr.publicis.sapient.mower;
+package fr.publicis.sapient.models;
 
 import fr.publicis.sapient.constant.Constants;
 import fr.publicis.sapient.enums.Command;
 import fr.publicis.sapient.enums.Orientation;
-import fr.publicis.sapient.models.Coordinates;
-import fr.publicis.sapient.models.LawnDimension;
-import fr.publicis.sapient.models.Position;
 
+import java.util.Map;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 
@@ -21,11 +20,11 @@ public class Clipper {
 
     private Integer id;
     private final Position position;
-    private final LawnDimension lawnDimension;
+    private final Lawn lawn;
 
-    public Clipper(Position position, LawnDimension lawnDimension) {
+    public Clipper(Position position, Lawn lawn) {
         this.position = position;
-        this.lawnDimension = lawnDimension;
+        this.lawn = lawn;
     }
 
     public Position getPosition() {
@@ -70,17 +69,34 @@ public class Clipper {
             y = orientation.equals(Orientation.NORTH) ? y + 1 : y - 1;
         }
 
-        BiPredicate<Integer, Integer> predicate = (a, b) -> (a > lawnDimension.width() || b > lawnDimension.length())
-                || (a < 0 || b < 0);
-
         Coordinates coordinates = new Coordinates(x, y);
-        if (predicate.test(x, y)) {
-            LOGGER.info(() -> Constants.ERROR_COLOR + " The coordinates (" + coordinates + ") is out of lawn"
-                    + Constants.HEAD_TEXT_COLOR);
-            return;
-        }
+        if (canMove(x, y, coordinates)) return;
 
         position.setCoordinates(coordinates);
+        lawn.addLocation(id, coordinates);
+    }
+
+    /**
+     *
+     * @param x axis
+     * @param y ordinate
+     * @param coordinates coordinates of mower
+     * @return a boolean that indicate if the mower can move at that coordinate
+     */
+    private boolean canMove(int x, int y, Coordinates coordinates) {
+        BiPredicate<Integer, Integer> predicate = (a, b) -> (a > lawn.getWidth() || b > lawn.getLength())
+                || (a < 0 || b < 0);
+
+        // We verify that there is not mower at this position
+        Map<Integer, Coordinates> coordinatesMap = lawn.getPreviousLocation();
+        Predicate<Map<Integer, Coordinates>> lawnPredicate = map -> map.containsValue(coordinates);
+
+        if (predicate.test(x, y) || lawnPredicate.test(coordinatesMap)) {
+            LOGGER.info(() -> Constants.ERROR_COLOR + " The coordinates (" + coordinates + ") is out of lawn"
+                    + Constants.HEAD_TEXT_COLOR);
+            return true;
+        }
+        return false;
     }
 
     private void turnLeft() {

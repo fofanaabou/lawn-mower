@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>fr.publicis.sapient</groupId>
-  <artifactId>lawnDimension-clipper</artifactId>
+  <artifactId>lawn-clipper</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>lawnDimension-clipper</name>
+  <name>lawn-clipper</name>
 
   <properties>
     <java.version>17</java.version>

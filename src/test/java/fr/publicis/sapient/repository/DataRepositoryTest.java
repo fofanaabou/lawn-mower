@@ -3,7 +3,7 @@ package fr.publicis.sapient.repository;
 import fr.publicis.sapient.enums.Orientation;
 import fr.publicis.sapient.models.Coordinates;
 import fr.publicis.sapient.models.Position;
-import fr.publicis.sapient.mower.Clipper;
+import fr.publicis.sapient.models.Clipper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

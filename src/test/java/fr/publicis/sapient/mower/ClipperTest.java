@@ -1,9 +1,10 @@
 package fr.publicis.sapient.mower;
 
 import fr.publicis.sapient.enums.Command;
+import fr.publicis.sapient.models.Clipper;
 import fr.publicis.sapient.models.Coordinates;
 import fr.publicis.sapient.enums.Orientation;
-import fr.publicis.sapient.models.LawnDimension;
+import fr.publicis.sapient.models.Lawn;
 import fr.publicis.sapient.models.Position;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,15 +17,15 @@ import static org.junit.jupiter.api.Assertions.*;
  **/
 class ClipperTest {
 
-    LawnDimension lawnDimension;
+    Lawn lawn;
     Clipper clipper;
 
     @BeforeEach
     void setUp() {
-        lawnDimension = new LawnDimension(3, 2);
+        lawn = new Lawn(3, 2);
         Coordinates coordinates = new Coordinates(0, 0);
         Position position = new Position(coordinates, Orientation.NORTH);
-        clipper = new Clipper(position, lawnDimension);
+        clipper = new Clipper(position, lawn);
     }
 
     @Test

@@ -33,11 +33,11 @@ AADAADADDA
 ```
 3) Aller dans le repertoire lawn-mower et lancer la commande suivante:
 ```shell
-java -jar target/lawnDimension-clipper-1.0-SNAPSHOT.jar
+java -jar target/lawn-clipper-1.0-SNAPSHOT.jar
 ```
 Vous aurez cet affichage
 ```shell
-2018P002:/mnt/c/Users/mrdispo/Desktop/workspace/sapient/lawn-mower$ java -jar target/lawnDimension-clipper-1.0-SNAPSHOT.jar
+2018P002:/mnt/c/Users/mrdispo/Desktop/workspace/sapient/lawn-mower$ java -jar target/lawn-clipper-1.0-SNAPSHOT.jar
 Enter the file's path (Example -> /user/home/data/info.txt):
 ```
 Vous devez fournir l'emplacement du fichier, un exemple a été donné précédement.

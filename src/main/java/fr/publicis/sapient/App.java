@@ -1,6 +1,6 @@
 package fr.publicis.sapient;
 
-import fr.publicis.sapient.mower.Clipper;
+import fr.publicis.sapient.models.Clipper;
 import fr.publicis.sapient.repository.DataRepository;
 
 import java.io.IOException;
