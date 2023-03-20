@@ -4,9 +4,7 @@ import fr.publicis.sapient.constant.Constants;
 import fr.publicis.sapient.enums.Command;
 import fr.publicis.sapient.enums.Orientation;
 
-import java.util.Map;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 
@@ -70,32 +68,35 @@ public class Clipper {
         }
 
         Coordinates coordinates = new Coordinates(x, y);
-        if (canMove(x, y, coordinates)) return;
+        if (cannotMove(x, y, coordinates)) return;
 
         position.setCoordinates(coordinates);
         lawn.addLocation(id, coordinates);
     }
 
     /**
-     *
-     * @param x axis
-     * @param y ordinate
+     * @param x           axis
+     * @param y           ordinate
      * @param coordinates coordinates of mower
      * @return a boolean that indicate if the mower can move at that coordinate
      */
-    private boolean canMove(int x, int y, Coordinates coordinates) {
+    private boolean cannotMove(int x, int y, Coordinates coordinates) {
         BiPredicate<Integer, Integer> predicate = (a, b) -> (a > lawn.getWidth() || b > lawn.getLength())
                 || (a < 0 || b < 0);
 
-        // We verify that there is not mower at this position
-        Map<Integer, Coordinates> coordinatesMap = lawn.getPreviousLocation();
-        Predicate<Map<Integer, Coordinates>> lawnPredicate = map -> map.containsValue(coordinates);
-
-        if (predicate.test(x, y) || lawnPredicate.test(coordinatesMap)) {
+        if (predicate.test(x, y)) {
             LOGGER.info(() -> Constants.ERROR_COLOR + " The coordinates (" + coordinates + ") is out of lawn"
                     + Constants.HEAD_TEXT_COLOR);
             return true;
         }
+
+        var map = lawn.getPreviousLocation();
+        if (map.containsValue(coordinates)) {
+            LOGGER.info(() -> Constants.ERROR_COLOR + " This position with the coordinates (" + coordinates + ") is busy"
+                    + Constants.HEAD_TEXT_COLOR);
+            return true;
+        }
+
         return false;
     }
 
