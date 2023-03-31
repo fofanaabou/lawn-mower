@@ -49,20 +49,20 @@ class ClipperTest {
         assertAll(
                 () -> {
                     clipper.move();
-                    clipper.pivot('D');
+                    clipper.pivot(Command.RIGHT.getShortName());
                     clipper.move();
                     assertEquals(new Position(c1, Orientation.EAST), clipper.getPosition());
                 },
                 () -> {
                     clipper.move();
-                    clipper.pivot('G');
+                    clipper.pivot(Command.LEFT.getShortName());
                     clipper.move();
                     assertEquals(new Position(c2, Orientation.NORTH), clipper.getPosition());
                 },
                 ()-> {
                     clipper.move();
                     clipper.move();
-                    clipper.pivot('D');
+                    clipper.pivot(Command.RIGHT.getShortName());
                     clipper.move();
                     assertEquals(new Position(c3, Orientation.EAST), clipper.getPosition());
                 });

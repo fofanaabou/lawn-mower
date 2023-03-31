@@ -1,16 +1,17 @@
 package fr.publicis.sapient.repository;
 
 import fr.publicis.sapient.enums.Orientation;
+import fr.publicis.sapient.models.Clipper;
 import fr.publicis.sapient.models.Coordinates;
 import fr.publicis.sapient.models.Lawn;
 import fr.publicis.sapient.models.Position;
-import fr.publicis.sapient.models.Clipper;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Author: Abou FOFANA
@@ -19,14 +20,18 @@ import java.util.*;
 public class DataRepository {
 
     private static final int INDEX_OF_FIRST_LINE = 0;
-    private static final int ORIENTATION_INDEX  = 2;
+    private static final int ORIENTATION_INDEX = 2;
     private static final int COORDINATE_FIRST_ELEMENT_INDEX = 0;
     private static final int COORDINATE_SECOND_ELEMENT_INDEX = 1;
 
     public Map<Clipper, List<Character>> readData(String pathName) throws IOException {
 
         Path path = Paths.get(pathName);
-        List<String> lines = Files.readAllLines(path.toAbsolutePath());
+        List<String> lines;
+
+        try (Stream<String> s = Files.lines(path)) {
+            lines = new ArrayList<>(s.toList());
+        }
 
         Lawn lawn = getLawnDimension(lines);
 
@@ -36,6 +41,7 @@ public class DataRepository {
     /**
      * this function extract the dimension of lawn. The first line in file content this information
      * this line has two element, so we use 0 and 1 as index to retrieve their value from create list
+     *
      * @param lines list of data from file
      * @return the dimension of lawn
      */
@@ -51,13 +57,14 @@ public class DataRepository {
     /**
      * this function retrieve create clipper and set its information, then create list of commands that clipper
      * will execute.
+     *
      * @param lines list of data from file
-     * @param lawn lawn dimension
+     * @param lawn  lawn dimension
      * @return a map in which the key is clipper and the value is list of commands
      */
     private Map<Clipper, List<Character>> getClippersAndCommands(List<String> lines, Lawn lawn) {
 
-        Map<Clipper, List<Character>> clippers = new HashMap<>();
+        Map<Clipper, List<Character>> clippers = new TreeMap<>(Comparator.comparingInt(Clipper::getId));
         int id = 1;
 
         for (int i = 1; i < lines.size(); i += 2) {
@@ -85,23 +92,16 @@ public class DataRepository {
     }
 
     private Orientation getOrientation(Character character) {
-        switch (character) {
-            case 'N' -> {
-                return Orientation.NORTH;
-            }
-            case 'W' -> {
-                return Orientation.WEST;
-            }
-            case 'S' -> {
-                return Orientation.SOUTH;
-            }
-            case 'E' -> {
-                return Orientation.EAST;
-            }
+        return switch (character) {
+            case 'N' -> Orientation.NORTH;
 
-            default -> {
-                return Orientation.valueOf(null);
-            }
-        }
+            case 'W' -> Orientation.WEST;
+
+            case 'S' -> Orientation.SOUTH;
+
+            case 'E' -> Orientation.EAST;
+
+            default -> Orientation.valueOf(null);
+        };
     }
 }

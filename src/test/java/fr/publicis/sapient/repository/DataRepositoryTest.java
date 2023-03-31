@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  **/
 class DataRepositoryTest {
 
-    private static final String FILE_PATH = "src/main/resources/data/mowers-info.txt";
+    private static final String FILE_PATH = "src/test/resources/data/mowers-info.txt";
     DataRepository dataRepository;
 
     @BeforeEach
@@ -35,7 +35,6 @@ class DataRepositoryTest {
         Map<Clipper, List<Character>> clipperMap = dataRepository.readData(FILE_PATH);
         List<Clipper> clippers = clipperMap.keySet()
                 .stream()
-                .sorted(Comparator.comparingInt(Clipper::getId))
                 .toList();
 
         assertAll(

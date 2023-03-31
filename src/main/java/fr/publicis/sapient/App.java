@@ -35,7 +35,6 @@ public class App {
 
                 List<Clipper> clippers = clipperMap.keySet()
                         .stream()
-                        .sorted(Comparator.comparingInt(Clipper::getId))
                         .toList();
 
                 for (Clipper clipper : clippers) {
@@ -68,9 +67,9 @@ public class App {
 
     private static void start(Clipper clipper, List<Character> commands) {
 
-        for (char command : commands) {
+        for (var command : commands) {
             switch (command) {
-                case 'A' -> clipper.move();
+                case  'A' -> clipper.move();
                 case 'D', 'G' -> clipper.pivot(command);
                 default -> throw new IllegalArgumentException("invalid command");
             }
